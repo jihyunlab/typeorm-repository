@@ -67,7 +67,7 @@ const result = await this.userTypeOrmRepository.findOne(
   {
     name: 'jihyunlab',
   },
-  { isCaseSensitive: true }
+  { ignoreCase: false }
 );
 ```
 
@@ -83,7 +83,7 @@ const result = await this.userTypeOrmRepository.findOne(
     name: 'Jihyun',
     email: 'INFO@JIHYUNLAB.COM',
   },
-  { isExact: false }
+  { contains: true }
 );
 ```
 
@@ -207,7 +207,7 @@ const result = await this.userTypeOrmRepository.update(
     email: 'INFO@JIHYUNLAB.COM',
   },
   { name: 'JihyunLab', email: 'info@jihyunlab.com' },
-  { isExact: false }
+  { contains: true }
 );
 ```
 
@@ -227,7 +227,7 @@ const result = await this.userTypeOrmRepository.delete(
     name: 'Jihyun',
     email: 'INFO@JIHYUNLAB.COM',
   },
-  { isExact: false }
+  { contains: true }
 );
 ```
 

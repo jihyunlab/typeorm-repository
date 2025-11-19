@@ -12,6 +12,6 @@ export interface QueryOptions {
 }
 
 export interface MatchingOptions {
-  isCaseSensitive?: boolean;
-  isExact?: boolean;
+  ignoreCase?: boolean;
+  contains?: boolean;
 }

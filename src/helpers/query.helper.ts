@@ -17,8 +17,8 @@ export const QueryHelper = {
     queryOptions?: QueryOptions,
     matchingOptions?: MatchingOptions
   ) {
-    const isCaseSensitive = matchingOptions?.isCaseSensitive ?? false;
-    const isExact = matchingOptions?.isExact ?? true;
+    const ignoreCase = matchingOptions?.ignoreCase ?? true;
+    const contains = matchingOptions?.contains ?? false;
 
     const where: object[] = [];
     let conditions: object[] = [];
@@ -60,19 +60,19 @@ export const QueryHelper = {
             if (Array.isArray(value['$ne'])) {
               return [key, Not(In(value['$ne']))];
             } else {
-              if (!isCaseSensitive && typeof value['$ne'] === 'string') {
-                if (isExact) {
-                  return [key, Not(ILike(value['$ne']))];
-                } else {
+              if (ignoreCase && typeof value['$ne'] === 'string') {
+                if (contains) {
                   return [key, Not(ILike(`%${value['$ne']}%`))];
+                } else {
+                  return [key, Not(ILike(value['$ne']))];
                 }
               }
 
-              if (isExact) {
-                return [key, Not(value['$ne'])];
+              if (contains) {
+                return [key, Not(`%${value['$ne']}%`)];
               }
 
-              return [key, Not(`%${value['$ne']}%`)];
+              return [key, Not(value['$ne'])];
             }
           }
 
@@ -80,19 +80,19 @@ export const QueryHelper = {
             return [key, In(value)];
           }
 
-          if (!isCaseSensitive && typeof value === 'string') {
-            if (isExact) {
-              return [key, ILike(value)];
-            } else {
+          if (ignoreCase && typeof value === 'string') {
+            if (contains) {
               return [key, ILike(`%${value}%`)];
+            } else {
+              return [key, ILike(value)];
             }
           }
 
-          if (isExact) {
-            return [key, value];
+          if (contains) {
+            return [key, Like(`%${value}%`)];
           }
 
-          return [key, Like(`%${value}%`)];
+          return [key, value];
         })
       );
 
