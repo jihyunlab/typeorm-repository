@@ -1,0 +1,38 @@
+{
+  "name": "@jihyunlab/typeorm-repository",
+  "version": "1.0.0",
+  "description": "JihyunLab TypeORM Repository.",
+  "license": "MIT",
+  "author": "JihyunLab <info@jihyunlab.com> (https://jihyunlab.com)",
+  "homepage": "https://jihyunlab.com/library/npm/typeorm-repository",
+  "repository": "https://github.com/jihyunlab/typeorm-repository",
+  "bugs": "https://github.com/jihyunlab/typeorm-repository/issues",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --build",
+    "start": "tsc --build && node dist/index.js",
+    "clean": "tsc --build --clean",
+    "lint": "eslint \"**/*.{ts,tsx,mts,cts}\"",
+    "prettier": "prettier --check \"**/*.{ts,tsx,mts,cts}\""
+  },
+  "keywords": [
+    "typeorm",
+    "repository"
+  ],
+  "dependencies": {
+    "typeorm": "^0.3.27"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@jihyunlab/eslint-config": "^2.1.1",
+    "@jihyunlab/prettier-config": "^2.1.1",
+    "@types/node": "^24.10.1",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.47.0"
+  }
+}
