@@ -98,6 +98,8 @@ const result = await this.userTypeOrmRepository.findOne(
 
 Provides IN-based search and sorting capabilities.
 
+The matching options, ignoreCase and contains, do not apply when using the IN operator.
+
 ```
 const result = await this.userTypeOrmRepository.find(
   {
