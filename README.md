@@ -83,7 +83,7 @@ const result = await this.userTypeOrmRepository.findOne(
     name: 'Jihyun',
     email: 'INFO@JIHYUNLAB.COM',
   },
-  { isExactMatch: false }
+  { isExact: false }
 );
 ```
 
@@ -207,7 +207,7 @@ const result = await this.userTypeOrmRepository.update(
     email: 'INFO@JIHYUNLAB.COM',
   },
   { name: 'JihyunLab', email: 'info@jihyunlab.com' },
-  { isExactMatch: false }
+  { isExact: false }
 );
 ```
 
@@ -227,7 +227,7 @@ const result = await this.userTypeOrmRepository.delete(
     name: 'Jihyun',
     email: 'INFO@JIHYUNLAB.COM',
   },
-  { isExactMatch: false }
+  { isExact: false }
 );
 ```
 

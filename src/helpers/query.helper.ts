@@ -18,7 +18,7 @@ export const QueryHelper = {
     matchingOptions?: MatchingOptions
   ) {
     const isCaseSensitive = matchingOptions?.isCaseSensitive ?? false;
-    const isExactMatch = matchingOptions?.isExactMatch ?? true;
+    const isExact = matchingOptions?.isExact ?? true;
 
     const where: object[] = [];
     let conditions: object[] = [];
@@ -61,14 +61,14 @@ export const QueryHelper = {
               return [key, Not(In(value['$ne']))];
             } else {
               if (!isCaseSensitive && typeof value['$ne'] === 'string') {
-                if (isExactMatch) {
+                if (isExact) {
                   return [key, Not(ILike(value['$ne']))];
                 } else {
                   return [key, Not(ILike(`%${value['$ne']}%`))];
                 }
               }
 
-              if (isExactMatch) {
+              if (isExact) {
                 return [key, Not(value['$ne'])];
               }
 
@@ -81,14 +81,14 @@ export const QueryHelper = {
           }
 
           if (!isCaseSensitive && typeof value === 'string') {
-            if (isExactMatch) {
+            if (isExact) {
               return [key, ILike(value)];
             } else {
               return [key, ILike(`%${value}%`)];
             }
           }
 
-          if (isExactMatch) {
+          if (isExact) {
             return [key, value];
           }
 
