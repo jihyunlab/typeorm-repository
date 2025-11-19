@@ -20,71 +20,84 @@ export const QueryHelper = {
     const isCaseSensitive = matchingOptions?.isCaseSensitive ?? false;
     const isExactMatch = matchingOptions?.isExactMatch ?? true;
 
-    const where = Object.fromEntries(
-      Object.entries(criteria).map(([key, value]) => {
-        if (typeof value === 'object' && value['$gte']) {
-          return [key, MoreThanOrEqual(value['$gte'])];
-        }
+    const where: object[] = [];
+    let conditions: object[] = [];
 
-        if (typeof value === 'object' && value['$gt']) {
-          return [key, MoreThan(value['$gt'])];
-        }
+    if (Array.isArray(criteria)) {
+      conditions = criteria;
+    } else {
+      conditions = [criteria];
+    }
 
-        if (typeof value === 'object' && value['$lte']) {
-          return [key, LessThanOrEqual(value['$lte'])];
-        }
-
-        if (typeof value === 'object' && value['$lt']) {
-          return [key, LessThan(value['$lt'])];
-        }
-
-        if (typeof value === 'object' && value['$regex']) {
-          if (value['$options'] === 'i') {
-            return [key, Raw((alias) => `${alias} ~* '${value['$regex']}'`)];
-          } else {
-            return [key, Raw((alias) => `${alias} ~ '${value['$regex']}'`)];
+    for (let i = 0; i < conditions.length; i++) {
+      const condition = Object.fromEntries(
+        Object.entries(conditions[i]).map(([key, value]) => {
+          if (typeof value === 'object' && value['$gte']) {
+            return [key, MoreThanOrEqual(value['$gte'])];
           }
-        }
 
-        if (typeof value === 'object' && value['$ne']) {
-          if (Array.isArray(value['$ne'])) {
-            return [key, Not(In(value['$ne']))];
-          } else {
-            if (!isCaseSensitive && typeof value['$ne'] === 'string') {
-              if (isExactMatch) {
-                return [key, Not(ILike(value['$ne']))];
-              } else {
-                return [key, Not(ILike(`%${value['$ne']}%`))];
+          if (typeof value === 'object' && value['$gt']) {
+            return [key, MoreThan(value['$gt'])];
+          }
+
+          if (typeof value === 'object' && value['$lte']) {
+            return [key, LessThanOrEqual(value['$lte'])];
+          }
+
+          if (typeof value === 'object' && value['$lt']) {
+            return [key, LessThan(value['$lt'])];
+          }
+
+          if (typeof value === 'object' && value['$regex']) {
+            if (value['$options'] === 'i') {
+              return [key, Raw((alias) => `${alias} ~* '${value['$regex']}'`)];
+            } else {
+              return [key, Raw((alias) => `${alias} ~ '${value['$regex']}'`)];
+            }
+          }
+
+          if (typeof value === 'object' && value['$ne']) {
+            if (Array.isArray(value['$ne'])) {
+              return [key, Not(In(value['$ne']))];
+            } else {
+              if (!isCaseSensitive && typeof value['$ne'] === 'string') {
+                if (isExactMatch) {
+                  return [key, Not(ILike(value['$ne']))];
+                } else {
+                  return [key, Not(ILike(`%${value['$ne']}%`))];
+                }
               }
-            }
 
+              if (isExactMatch) {
+                return [key, Not(value['$ne'])];
+              }
+
+              return [key, Not(`%${value['$ne']}%`)];
+            }
+          }
+
+          if (Array.isArray(value)) {
+            return [key, In(value)];
+          }
+
+          if (!isCaseSensitive && typeof value === 'string') {
             if (isExactMatch) {
-              return [key, Not(value['$ne'])];
+              return [key, ILike(value)];
+            } else {
+              return [key, ILike(`%${value}%`)];
             }
-
-            return [key, Not(`%${value['$ne']}%`)];
           }
-        }
 
-        if (Array.isArray(value)) {
-          return [key, In(value)];
-        }
-
-        if (!isCaseSensitive && typeof value === 'string') {
           if (isExactMatch) {
-            return [key, ILike(value)];
-          } else {
-            return [key, ILike(`%${value}%`)];
+            return [key, value];
           }
-        }
 
-        if (isExactMatch) {
-          return [key, value];
-        }
+          return [key, Like(`%${value}%`)];
+        })
+      );
 
-        return [key, Like(`%${value}%`)];
-      })
-    );
+      where.push(condition);
+    }
 
     const query: {
       where: object;

@@ -60,7 +60,22 @@ const result = await this.userTypeOrmRepository.findOne({
 }
 ```
 
-Supports substring search for all string fields with minimal configuration.
+Provides case-sensitivity configuration with a simple mechanism.
+
+```
+const result = await this.userTypeOrmRepository.findOne(
+  {
+    name: 'jihyunlab',
+  },
+  { isCaseSensitive: true }
+);
+```
+
+```
+null
+```
+
+Provides substring-search functionality with a simple mechanism.
 
 ```
 const result = await this.userTypeOrmRepository.findOne(
@@ -159,7 +174,31 @@ const result = await this.userTypeOrmRepository.find({
 ]
 ```
 
-Provides entity update functionality based on search criteria.
+Provides OR-based query functionality by accepting multiple criteria as an array.
+
+```
+const result = await this.userTypeOrmRepository.find([
+  {
+    name: 'JihyunLab',
+  },
+  {
+    email: { $regex: '^info@jihyunlab.com$', $options: 'i' },
+  },
+]);
+```
+
+```
+[
+  {
+    "id": 1,
+    "name": "JihyunLab",
+    "email": "info@jihyunlab.com",
+    "created_at": "2025-11-19T03:33:03.231Z"
+  }
+]
+```
+
+Provides entity update functionality based on the same conditions used for find queries.
 
 ```
 const result = await this.userTypeOrmRepository.update(
@@ -180,7 +219,7 @@ const result = await this.userTypeOrmRepository.update(
 }
 ```
 
-Provides entity deletion functionality based on search criteria.
+Provides entity deletion functionality based on the same conditions used for find queries.
 
 ```
 const result = await this.userTypeOrmRepository.delete(
