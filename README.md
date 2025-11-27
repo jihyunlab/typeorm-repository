@@ -21,7 +21,7 @@ import { Repository } from 'typeorm';
 import { TypeOrmRepository } from '@jihyunlab/typeorm-repository';
 
 @Injectable()
-export class TypeOrmService {
+export class UserService {
   private readonly userTypeOrmRepository: TypeOrmRepository;
 
   constructor(
