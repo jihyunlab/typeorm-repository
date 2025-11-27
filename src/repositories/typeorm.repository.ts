@@ -86,4 +86,18 @@ export class TypeOrmRepository {
 
     return await this.repository.delete(query);
   }
+
+  async count(
+    criteria: object,
+    queryOptions?: QueryOptions,
+    matchingOptions?: MatchingOptions
+  ) {
+    const query = await QueryHelper.findOptions(
+      criteria,
+      queryOptions,
+      matchingOptions
+    );
+
+    return await this.repository.count(query);
+  }
 }
