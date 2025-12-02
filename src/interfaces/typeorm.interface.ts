@@ -4,6 +4,10 @@ export const ORDER = {
 } as const;
 export type ORDER = (typeof ORDER)[keyof typeof ORDER];
 
+export interface InsertOptions {
+  ignoreEmpty?: boolean;
+}
+
 export interface QueryOptions {
   limit?: number;
   offset?: number;

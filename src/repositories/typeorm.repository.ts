@@ -1,5 +1,9 @@
 import { Repository } from 'typeorm';
-import { QueryOptions, MatchingOptions } from '../interfaces/typeorm.interface';
+import {
+  InsertOptions,
+  QueryOptions,
+  MatchingOptions,
+} from '../interfaces/typeorm.interface';
 import { QueryHelper } from '../helpers/query.helper';
 
 export class TypeOrmRepository {
@@ -9,7 +13,9 @@ export class TypeOrmRepository {
     this.repository = repository;
   }
 
-  async insert(entity: any) {
+  async insert(entity: any, insertOptions?: InsertOptions) {
+    const ignoreEmpty = insertOptions?.ignoreEmpty ?? false;
+
     let entities: any[];
 
     if (Array.isArray(entity)) {
@@ -22,6 +28,16 @@ export class TypeOrmRepository {
       for (const key in entities[i]) {
         if (entities[i][key] === undefined || entities[i][key] === null) {
           delete entities[i][key];
+          continue;
+        }
+
+        if (
+          ignoreEmpty &&
+          typeof entities[i][key] === 'string' &&
+          entities[i][key].length === 0
+        ) {
+          delete entities[i][key];
+          continue;
         }
       }
     }
