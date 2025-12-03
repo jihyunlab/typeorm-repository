@@ -1,6 +1,6 @@
 import { TypeOrmRepository } from './repositories/typeorm.repository';
 import {
-  InsertOptions,
+  WriteOptions,
   QueryOptions,
   MatchingOptions,
   ORDER,
@@ -8,7 +8,7 @@ import {
 
 export {
   TypeOrmRepository,
-  InsertOptions,
+  WriteOptions,
   QueryOptions,
   MatchingOptions,
   ORDER,
